@@ -1,22 +1,23 @@
 application:
 
-  # 规则源配置 - 三个 Clash 规则源
+  # 输入配置 - 定义规则源
   input:
-    - name: 'adblockmihomo'
-      path: 'https://gcore.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomo.yaml'
-      type: clash
+    - name: 'AWAvenue-Ads-Rule'
+      path: 'https://github.boki.moe/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt'
+      type: easylist
 
     - name: 'DD-AD'
-      path: 'https://ghproxy.net/https://raw.githubusercontent.com/afwfv/DD-AD/refs/heads/release/clash.yaml'
-      type: clash
+      path: 'https://gcore.jsdelivr.net/gh/afwfv/DD-AD@refs/heads/release/DD-AD.txt'
+      type: easylist
 
-    - name: 'AWAvenue-Ads-Rule'
-      path: 'https://github.boki.moe/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash-Classical.yaml'
-      type: clash
+    - name: 'adblockdns'
+      path: 'https://gcore.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockdns.txt'
+      type: easylist
 
   # 输出配置
   output:
     # 文件头配置，将自动作为注释添加至每个规则文件开始
+    # 可使用占位符 ${name}、${type}、${desc} 以及 ${date} (当前日期)、${total} (规则总数)
     file_header: |
       ADFS AdBlock ${type}
       Last Modified: ${date}
@@ -24,32 +25,17 @@ application:
       Homepage: https://github.com/fordes123/ad-filters-subscriber/
       
     files:
-      # 输出为 Clash 格式
       - name: clash.yaml
         type: clash
-        desc: 'Merged Clash AdBlock Rules'
-        filter:
-          - basic      # 基本规则
-          - wildcard   # 通配规则
-          - unknown    # 其他规则
-
-      # 同时输出其他格式（可选）
-      - name: easylist.txt
-        type: easylist
-        desc: 'Merged EasyList Rules'
+        desc: 'Merged AdBlock Rules for Clash'
         filter:
           - basic
           - wildcard
+          - unknown
 
-      - name: dns.txt
-        type: dns
-        desc: 'Merged DNS Rules'
-        filter:
-          - basic
-          - wildcard
-
-      - name: hosts.txt
-        type: hosts
-        desc: 'Merged Hosts Rules'
-        filter:
-          - basic
+  # 程序运行配置（可选）
+  config:
+    # 解析器配置
+    parser:
+      # 预期总规则数量，有助于提前分配内存以提高去重性能
+      expected: 300000
